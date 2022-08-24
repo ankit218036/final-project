@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>charts Tutorial
+    </title>
+</head>
+
+<body>
+
+    <div>
+
+        <br><br>
+        <a href="http://127.0.0.1:5000/">
+            <button>back</button>
+        </a>
+      </div>
+
+  <div>
+
+    <h1>TS_13_16</h1>
+    <canvas id="myChart" width="2000" height="500"></canvas>
+    <button onclick="updateChart()"></button>
+
+  </div>
+
+<script>
+    const data = {
+    
+      datasets: [{
+        label: 'MER DATA',
+        // data: [0, 10, 5, 2, 20, 30, 45],
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+      }]
+    };
+    
+  // config block
+    const config = {
+      type: 'line',
+      data: data,
+        options: {
+            scales:{
+                
+                y:{
+                    beginAtZero: true
+                }
+            }
+        } 
+    };
+
+    // Render block
+
+    const myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
+
+// fetch and update block
+    function updateChart(){
+
+            async function fetchdata(){
+                const url ='https://dummyjson.com/products/1';
+                const response = await fetch(url);
+                const datapoints = await response.json();
+                console.log(datapoints.title)
+                return datapoints;
+                
+            };
+
+            fetchdata().then(datapoints =>{
+                    const month=datapoints.title;
+
+                    const revenue=datapoints.rating;
+
+                if(myChart.data.labels.length>=5){
+
+                    myChart.config.data.labels.shift();
+                    myChart.config.data.datasets[0].data.shift();
+                }
+              
+                myChart.config.data.labels.push(month)
+                myChart.config.data.datasets[0].data.push(revenue)
+                myChart.update();
+
+            })
+            chart.update('quiet');
+        };
+        
+    setInterval(updateChart,2000)
+
+  </script>
+
+</body>
+    
+</html>
